@@ -14,6 +14,10 @@ def drawArrowheadedAxis(ax,position):
     xmin,xmax = ax.get_xlim()
     ymin,ymax = ax.get_ylim()
 
+    if position not in ["top","bottom","left","right"]:
+        print "the postion should be 'top','bottom','left' or 'right'."
+        return
+
     if position == "top":
         xy = (xmax,ymax)
         xytext = (xmin,ymax)
@@ -26,17 +30,6 @@ def drawArrowheadedAxis(ax,position):
     elif position == "right":
         xy = (xmax,ymax)
         xytext = (xmax,ymin)
-    else:
-        print "the postion should be 'top','bottom','left' or 'right'."
-        return
-
-    ax.spines["top"].set_visible(False)
-    ax.spines["bottom"].set_visible(False)
-    ax.spines["left"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-
-    ax.get_xaxis().set_visible(False)
-    ax.get_yaxis().set_visible(False)
 
     # set properties of arrow
     arrowprops = { "arrowstyle":'-|>', # style and direction of arrow
@@ -47,17 +40,24 @@ def drawArrowheadedAxis(ax,position):
     return arrow
 
 def test():
+    '''an example for ploting'''
     import matplotlib.pyplot as plt
     import numpy as np
     fig = plt.figure(0,facecolor="w")
     ax = fig.add_subplot(111)
 
-    x = np.linspace(0,100,1000)
+    #draw a curve
+    x = np.linspace(0,6*np.pi,1000)
     y = np.sin(x)
+    ax.axis([0,6*np.pi,-1,1])
     ax.plot(x,y)
 
-    drawArrowheadedAxis(ax, "bottom") # add bottom x axis
-    drawArrowheadedAxis(ax, "left") # add left y axis
+    ax.spines["top"].set_visible(False) #turn off top spine line
+    ax.spines["right"].set_visible(False) #turn off right spine linw
+    ax.tick_params(axis="both",top="off",right="off") # turn off top and right ticks
+
+    drawArrowheadedAxis(ax, "bottom") # add bottom x axis with arrow
+    drawArrowheadedAxis(ax, "left") # add left y axis with arrow
     plt.show()
 
 if __name__ == "__main__":
